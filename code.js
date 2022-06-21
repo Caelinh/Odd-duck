@@ -1,5 +1,12 @@
 'use strict';
 
+let chartEl = document.getElementById('myChart');
+let ctx = chartEl.getContext('2d');
+var options = { 
+    responsive: true,
+    maintainAspectRatio: true
+}
+
 let pageElements = document.querySelectorAll('img');//selects all image tags
 let resultsButton = document.querySelector('#button');
 let results = document.querySelector('#Info');
@@ -7,6 +14,8 @@ let results = document.querySelector('#Info');
 let roundCounter = 0;
 let clicks = 0;
 let views = 0;
+
+
 
 let fileNames = [
     'bag.jpg',
@@ -32,6 +41,8 @@ let fileNames = [
 ];
 
 const images = [];
+const clickData = [];
+const viewData = [];
 
 function Image(fileName) {
     this.clicks = 0;
@@ -49,15 +60,11 @@ for (let i = 0; i < fileNames.length; i++) {
     images.push(new Image(fileNames[i]));
 }
 
+let image1 = generateRandomImage();
+let image2 = generateRandomImage();
+let image3 = generateRandomImage();
 
-// assigning objects in code to page elements to display on
-pageElements[0].id = images[0].id;
-pageElements[0].src = images[0].src;
-pageElements[1].id = images[1].id;
-pageElements[1].src = images[1].src;
-pageElements[2].id = images[2].id;
-pageElements[2].src = images[2].src;
-
+renderImages();
 //checking that whats being clicked is in the image sources and adding a click
 function handleClick(event) {
     for (let i = 0; i < images.length; i++) {
@@ -66,7 +73,6 @@ function handleClick(event) {
         }
     }
     renderImages();
-    // console.log(images)
 }
 
 //adding an event listener to all the page elements
@@ -80,18 +86,36 @@ function generateRandomImage() {
     return images[index];
 }
 
+
+function noDuplicates(){
+    let currentImage1 = pageElements[0].id
+    let currentImage2 = pageElements[1].id
+    let currentImage3 = pageElements[2].id
+
+    while (image1.id === currentImage1 || image1.id === currentImage2 || image1.id === currentImage3) {
+        image1 = generateRandomImage();
+    }
+
+    while (image2.id === currentImage1 || image2.id === currentImage2 || image2.id === currentImage3) {
+        image2 = generateRandomImage();
+    }
+
+    while (image3.id === currentImage1 || image3.id === currentImage2 || image3.id === currentImage3) {
+        image3 = generateRandomImage();
+    }
+
+}
 //checking the random images for duplicates and rendering to page by assigning to page elements
 
 function renderImages() {
-    let image1 = generateRandomImage();
-    let image2 = generateRandomImage();
-    let image3 = generateRandomImage();
+    noDuplicates();
+  while (image1.id === image2.id || image2.id === image3.id || image1.id === image3.id){
+    image1 = generateRandomImage();
+    image2 = generateRandomImage();
+    image3 = generateRandomImage();
+    noDuplicates();
+  }
 
-    while (image1.id === image2.id && image2.id === image3.id) {
-        while (image3.id === image1.id) {
-            image1 = generateRandomImage();
-        }
-    }
     pageElements[0].id = image1.id;
     pageElements[0].src = image1.src;
     pageElements[1].id = image2.id;
@@ -102,16 +126,22 @@ function renderImages() {
     image2.views++;
     image3.views++;
     roundCounter++;
-    console.log(roundCounter);
     if (roundCounter == 25) {
         images.forEach(function (img) {
-            let dataSlot = document.getElementById('Info')
-            let name = document.createElement('p')
-            dataSlot.appendChild(name)
+            // let dataSlot = document.getElementById('Info')
+            // let name = document.createElement('p')
+            // dataSlot.appendChild(name)
 
-            name.textContent = 'Image: ' + img.id + '  Clicks: ' + img.clicks + ' views: ' + img.views;
+            // name.textContent = 'Image: ' + img.id + '  Clicks: ' + img.clicks + ' views: ' + img.views;
+            resultsButton.classList.toggle('hide');
             resultsButton.classList.toggle('reveal');
+
         })
+        images.forEach(function (img) {
+            clickData.push(img.clicks);
+            viewData.push(img.views);
+        })
+        renderChart();
     }
 }
 
@@ -123,4 +153,22 @@ function displayData() {
 }
 resultsButton.addEventListener('click', function (event) {
     results.classList.toggle('reveal');
+    myChart.classList.toggle('reveal');
 })
+function renderChart() {
+    let myChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: fileNames,
+            datasets: [{
+                label: '# of Votes',
+                data: clickData,
+                backgroundColor: ['Red']
+            }, {
+                label: '# of Views',
+                data: viewData,
+                backgroundColor: ['blue']
+            }]
+        },
+    });
+}

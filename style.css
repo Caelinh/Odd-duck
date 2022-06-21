@@ -1,27 +1,62 @@
-header{
-    text-align: center;
+header {
+    margin: auto;
     font-size: 40px;
 }
-img{
+
+h1 {
+    margin-top: 2rem;
+    font-family: 'Libre Baskerville', serif;
+    font-size: 7rem;
+    color: #001f3f;
+    /* text-shadow: 4px 6px 1px rgba(0,0,0,0.2); */
+
+    text-shadow: 4px 3px 0px rgb(219, 219, 240), 9px 8px 0px rgba(0, 0, 0, 0.15);
+}
+
+body {
+    background-color: rgb(219, 219, 240);
+}
+
+img {
     width: 300px;
     height: 300px;
+    /* border: thick solid blue ; */
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
 }
-.Selections{
+
+.Selections {
     margin: 5rem auto;
-    width: min(90%, 75rem);
-    display: grid;
-    grid-template-columns:33% 33% 33%
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+
 }
-button{
+
+button {
     padding: 15px 32px;
     margin: 5rem 45rem;
 }
-div{
+
+div {
     text-align: center;
-    
+
 }
-p{
+
+p {
     font-size: 30px;
 }
-.hide{visibility: hidden;}
-.reveal{visibility: visible;}
+
+.hide {
+    visibility: hidden;
+}
+
+.reveal {
+    visibility: visible;
+}
+
+
+#chart {
+    width: 800px;
+
+    margin: auto;
+}
