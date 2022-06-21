@@ -1,1 +1,27 @@
-
+header{
+    text-align: center;
+    font-size: 40px;
+}
+img{
+    width: 300px;
+    height: 300px;
+}
+.Selections{
+    margin: 5rem auto;
+    width: min(90%, 75rem);
+    display: grid;
+    grid-template-columns:33% 33% 33%
+}
+button{
+    padding: 15px 32px;
+    margin: 5rem 45rem;
+}
+div{
+    text-align: center;
+    
+}
+p{
+    font-size: 30px;
+}
+.hide{visibility: hidden;}
+.reveal{visibility: visible;}
