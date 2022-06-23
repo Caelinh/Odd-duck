@@ -2,7 +2,7 @@
 
 let chartEl = document.getElementById('myChart');
 let ctx = chartEl.getContext('2d');
-var options = { 
+var options = {
     responsive: true,
     maintainAspectRatio: true
 }
@@ -10,6 +10,7 @@ var options = {
 let pageElements = document.querySelectorAll('img');//selects all image tags
 let resultsButton = document.querySelector('#button');
 let results = document.querySelector('#Info');
+let hideImg = document.querySelector('Selections');
 
 let roundCounter = 0;
 let clicks = 0;
@@ -40,9 +41,10 @@ let fileNames = [
 
 ];
 
-const images = [];
+let images = read() || [];
 const clickData = [];
 const viewData = [];
+const savedData = [];
 
 function Image(fileName) {
     this.clicks = 0;
@@ -55,11 +57,11 @@ Image.prototype.handleClick = function () {
 
 };
 //creating the file objects
-
-for (let i = 0; i < fileNames.length; i++) {
-    images.push(new Image(fileNames[i]));
+if (!images.length) {
+    for (let i = 0; i < fileNames.length; i++) {
+        images.push(new Image(fileNames[i]));
+    }
 }
-
 let image1 = generateRandomImage();
 let image2 = generateRandomImage();
 let image3 = generateRandomImage();
@@ -70,9 +72,12 @@ function handleClick(event) {
     for (let i = 0; i < images.length; i++) {
         if (event.target.id === images[i].id) {
             images[i].clicks++;
+            
         }
     }
     renderImages();
+
+
 }
 
 //adding an event listener to all the page elements
@@ -87,7 +92,7 @@ function generateRandomImage() {
 }
 
 
-function noDuplicates(){
+function noDuplicates() {
     let currentImage1 = pageElements[0].id
     let currentImage2 = pageElements[1].id
     let currentImage3 = pageElements[2].id
@@ -109,13 +114,12 @@ function noDuplicates(){
 
 function renderImages() {
     noDuplicates();
-  while (image1.id === image2.id || image2.id === image3.id || image1.id === image3.id){
-    image1 = generateRandomImage();
-    image2 = generateRandomImage();
-    image3 = generateRandomImage();
-    noDuplicates();
-  }
-
+    while (image1.id === image2.id || image2.id === image3.id || image1.id === image3.id) {
+        image1 = generateRandomImage();
+        image2 = generateRandomImage();
+        image3 = generateRandomImage();
+        noDuplicates();
+    }
     pageElements[0].id = image1.id;
     pageElements[0].src = image1.src;
     pageElements[1].id = image2.id;
@@ -126,17 +130,9 @@ function renderImages() {
     image2.views++;
     image3.views++;
     roundCounter++;
-    if (roundCounter == 25) {
-        images.forEach(function (img) {
-            // let dataSlot = document.getElementById('Info')
-            // let name = document.createElement('p')
-            // dataSlot.appendChild(name)
-
-            // name.textContent = 'Image: ' + img.id + '  Clicks: ' + img.clicks + ' views: ' + img.views;
-            resultsButton.classList.toggle('hide');
-            resultsButton.classList.toggle('reveal');
-
-        })
+    if (roundCounter == 26) {
+        resultsButton.classList.toggle('reveal');
+        save();
         images.forEach(function (img) {
             clickData.push(img.clicks);
             viewData.push(img.views);
@@ -148,9 +144,9 @@ function renderImages() {
 
 
 //function to write info to page 
-function displayData() {
+// function displayData() {
 
-}
+// }
 resultsButton.addEventListener('click', function (event) {
     results.classList.toggle('reveal');
     myChart.classList.toggle('reveal');
@@ -171,4 +167,26 @@ function renderChart() {
             }]
         },
     });
+}
+
+//save application state
+function save() {
+    let data = JSON.stringify(images);
+    localStorage.setItem('state', data);
+}
+//retrieve application state
+function read() {
+    let results = [];
+    let valuesFromLocalStorage = JSON.parse(localStorage.getItem('state'));
+    valuesFromLocalStorage.forEach(function (img) {
+        let image = new Image(img.id);
+        image.clicks = img.clicks
+        image.views = img.views
+        results.push(image);
+
+    })
+    return results;
+}
+function remakeImages() {
+
 }
