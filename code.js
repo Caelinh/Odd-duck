@@ -9,14 +9,13 @@ var options = {
 
 let pageElements = document.querySelectorAll('img');//selects all image tags
 let resultsButton = document.querySelector('#button');
+let clearButton = document.getElementById('clear');
 let results = document.querySelector('#Info');
 let hideImg = document.querySelector('Selections');
 
 let roundCounter = 0;
 let clicks = 0;
 let views = 0;
-
-
 
 let fileNames = [
     'bag.jpg',
@@ -53,9 +52,7 @@ function Image(fileName) {
     this.src = `./images/${fileName}`;
 }
 
-Image.prototype.handleClick = function () {
 
-};
 //creating the file objects
 if (!images.length) {
     for (let i = 0; i < fileNames.length; i++) {
@@ -79,7 +76,6 @@ function handleClick(event) {
 
 
 }
-
 //adding an event listener to all the page elements
 pageElements.forEach(function (img) {
     img.addEventListener('click', handleClick);
@@ -90,8 +86,6 @@ function generateRandomImage() {
     let index = Math.floor(Math.random() * images.length);
     return images[index];
 }
-
-
 function noDuplicates() {
     let currentImage1 = pageElements[0].id
     let currentImage2 = pageElements[1].id
@@ -141,15 +135,12 @@ function renderImages() {
     }
 }
 
-
-
-//function to write info to page 
-// function displayData() {
-
-// }
 resultsButton.addEventListener('click', function (event) {
     results.classList.toggle('reveal');
     myChart.classList.toggle('reveal');
+})
+clearButton.addEventListener('click', function(){
+    localStorage.clear();
 })
 function renderChart() {
     let myChart = new Chart(ctx, {
@@ -177,16 +168,15 @@ function save() {
 //retrieve application state
 function read() {
     let results = [];
-    let valuesFromLocalStorage = JSON.parse(localStorage.getItem('state'));
-    valuesFromLocalStorage.forEach(function (img) {
-        let image = new Image(img.id);
-        image.clicks = img.clicks
-        image.views = img.views
+    let valuesFromLocalStorage = [];
+    if (localStorage.getItem('state')){
+    valuesFromLocalStorage = JSON.parse(localStorage.getItem('state'));
+    for (let i = 0; i < valuesFromLocalStorage.length; i++) {
+        let image = new Image(valuesFromLocalStorage[i].id);
+        image.clicks = valuesFromLocalStorage[i].clicks
+        image.views = valuesFromLocalStorage[i].views
         results.push(image);
-
-    })
-    return results;
+    }
 }
-function remakeImages() {
-
+    return results;
 }
