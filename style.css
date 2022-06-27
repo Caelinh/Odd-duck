@@ -34,7 +34,7 @@ img {
 
 button {
     padding: 15px 32px;
-    margin: 5rem 45rem;
+    margin: 1rem 45rem;
 }
 
 div {
@@ -45,7 +45,13 @@ div {
 p {
     font-size: 30px;
 }
-
+#clear{
+    background-color:red;
+    color:white;
+}
+#clear:hover{
+    opacity: 75%;
+}
 .hide {
     visibility: hidden;
 }
